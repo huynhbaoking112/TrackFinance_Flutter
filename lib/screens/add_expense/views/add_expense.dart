@@ -16,6 +16,9 @@ class _AddExpenseState extends State<AddExpense> {
   TextEditingController categoryController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
+
+
+
   //AlertDiaLog
   TextEditingController colorController = TextEditingController();
   //Icon - Alert
@@ -30,15 +33,21 @@ class _AddExpenseState extends State<AddExpense> {
   ];
   String iconSelected = '';
   //------------------------------------------------
+
+
+
+
+
+
+
   // Color set - Alert
   Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
 
   void changeColor(Color color) {
-    setState(() { 
+    setState(() {
       pickerColor = color;
       colorController.text = pickerColor.toString();
-      });
+    });
   }
 
   bool openChooseColor = false;
@@ -47,9 +56,12 @@ class _AddExpenseState extends State<AddExpense> {
 
 
 
+
+
   @override
   void initState() {
     dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    colorController.text = pickerColor.toString();
     super.initState();
   }
 
@@ -256,8 +268,6 @@ class _AddExpenseState extends State<AddExpense> {
                                               setState(() {
                                                 openChooseColor =
                                                     !openChooseColor;
-                                                colorController.text =
-                                                    currentColor.toString();
                                               });
                                             },
                                             readOnly: true,
@@ -281,10 +291,12 @@ class _AddExpenseState extends State<AddExpense> {
                                                         BorderSide.none)),
                                           ),
 //Choose Color
-                                          openChooseColor ? ColorPicker(
-                                            pickerColor: pickerColor,
-                                            onColorChanged: changeColor,
-                                          ) : Container(),
+                                          openChooseColor
+                                              ? ColorPicker(
+                                                  pickerColor: pickerColor,
+                                                  onColorChanged: changeColor,
+                                                )
+                                              : Container(),
 
                                           const SizedBox(
                                             height: 20,
