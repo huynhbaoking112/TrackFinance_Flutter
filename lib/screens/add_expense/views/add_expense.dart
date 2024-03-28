@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -15,6 +16,9 @@ class _AddExpenseState extends State<AddExpense> {
   TextEditingController categoryController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
+  //AlertDiaLog
+  TextEditingController colorController = TextEditingController();
+  //Icon - Alert
   List<String> myCategoriesIcons = [
     'entertainment',
     'food',
@@ -24,6 +28,24 @@ class _AddExpenseState extends State<AddExpense> {
     'tech',
     'travel'
   ];
+  String iconSelected = '';
+  //------------------------------------------------
+  // Color set - Alert
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
+
+  void changeColor(Color color) {
+    setState(() { 
+      pickerColor = color;
+      colorController.text = pickerColor.toString();
+      });
+  }
+
+  bool openChooseColor = false;
+  //------------------------------------------------
+
+
+
 
   @override
   void initState() {
@@ -165,6 +187,10 @@ class _AddExpenseState extends State<AddExpense> {
                                           openSelectedIcon
                                               ? Container(
                                                   height: 200,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 10),
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
@@ -176,23 +202,45 @@ class _AddExpenseState extends State<AddExpense> {
                                                                       12)),
                                                       color: Colors.white),
                                                   child: GridView.builder(
-
                                                     itemCount: myCategoriesIcons
                                                         .length,
                                                     gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 3, crossAxisSpacing: 5, mainAxisSpacing: 5),
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 3,
+                                                            crossAxisSpacing: 5,
+                                                            mainAxisSpacing: 5),
                                                     itemBuilder:
                                                         (context, index) {
-                                                      return Container(
-                                                        height: 70,
-                                                        width: 70,
-                                                        decoration: BoxDecoration(
-                                                          border: Border.all(width: 1, color: Theme.of(context).colorScheme.outline),
-                                                          borderRadius: BorderRadius.circular(12)
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            iconSelected =
+                                                                myCategoriesIcons[
+                                                                    index];
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          height: 70,
+                                                          width: 70,
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  width: 2,
+                                                                  color: iconSelected ==
+                                                                          myCategoriesIcons[
+                                                                              index]
+                                                                      ? Colors
+                                                                          .green
+                                                                      : Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .outline),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12)),
+                                                          child: Image.asset(
+                                                              'assets/${myCategoriesIcons[index]}.png'),
                                                         ),
-                                                        child: Image.asset(
-                                                            'assets/${myCategoriesIcons[index]}.png'),
                                                       );
                                                     },
                                                   ))
@@ -201,12 +249,26 @@ class _AddExpenseState extends State<AddExpense> {
                                           const SizedBox(
                                             height: 20,
                                           ),
+
                                           //ColorField
                                           TextFormField(
-                                            // controller: dateController,
+                                            onTap: () {
+                                              setState(() {
+                                                openChooseColor =
+                                                    !openChooseColor;
+                                                colorController.text =
+                                                    currentColor.toString();
+                                              });
+                                            },
+                                            readOnly: true,
+                                            controller: colorController,
                                             textAlignVertical:
                                                 TextAlignVertical.center,
                                             decoration: InputDecoration(
+                                                suffixIcon: const Icon(
+                                                  Icons.arrow_drop_down,
+                                                  size: 20,
+                                                ),
                                                 isDense: true,
                                                 hintText: 'Color',
                                                 filled: true,
@@ -218,6 +280,12 @@ class _AddExpenseState extends State<AddExpense> {
                                                     borderSide:
                                                         BorderSide.none)),
                                           ),
+//Choose Color
+                                          openChooseColor ? ColorPicker(
+                                            pickerColor: pickerColor,
+                                            onColorChanged: changeColor,
+                                          ) : Container(),
+
                                           const SizedBox(
                                             height: 20,
                                           ),
@@ -258,7 +326,7 @@ class _AddExpenseState extends State<AddExpense> {
                     hintText: 'Date',
                     filled: true,
                     fillColor: Colors.white,
-                    prefixIcon: Icon(FontAwesomeIcons.clock,
+                    prefixIcon: const Icon(FontAwesomeIcons.clock,
                         size: 16, color: Colors.grey),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
