@@ -39,6 +39,10 @@ dependencies:
   fl_chart: ^0.66.2
   intl:
   flutter_colorpicker: 
+
+  expense_repository:
+    path: packages/expense_repository
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
